@@ -161,9 +161,10 @@ public class EpicAPI {
                 EpicAccessTokenResponse accessTokenResponse = accessTokenResponseJsonAdapter
                         .fromJson(Objects.requireNonNull(response.body()).source());
                 if (accessTokenResponse == null)
-                    logger.error("Failed to process authorization server response");
+                    logger.error("Failed to process authorization server [{}] response", getEpicOAuthTokenURL());
                 else
-                    logger.error("Failed to acquire access token, error received: {}", accessTokenResponse.error);
+                    logger.error("Failed to acquire access token from authorization server [{}], error received: {}",
+                            getEpicOAuthTokenURL(), accessTokenResponse.error);
                 return null;
             } else
                 throw new IOException("Unexpected code from Epic authorization server " + response);
