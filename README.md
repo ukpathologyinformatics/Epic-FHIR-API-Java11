@@ -4,8 +4,32 @@ A Java 11+ wrapper implementation to enable Epic FHIR
 [Backend Service](https://fhir.epic.com/Documentation?docId=oauth2&section=BackendOAuth2Guide) authentication
 with the [HAPI FHIR](https://hapifhir.io/) Java FHIR implementation with minimal setup.
 
-### Creating an EpicAPI wrapper instance
-Creating a basic EpicAPI wrapper instance:
+### Installing and Using Locally
+##### Requires
+* Java 11+
+* Maven 3.6+
+##### Installing to Local Maven Repository
+To install locally, simply clone this repository and issue the following command:
+```bash
+mvn clean install
+```
+##### Using in Maven Projects
+Once the Maven project has compiled and been installed to your local repository, you can add it as a dependency to other projects using:
+```xml
+<dependencies>
+    ...
+    <dependency>
+        <groupId>edu.uky.pml.epic</groupId>
+        <artifactId>fhir-api</artifactId>
+        <version>0.1-11</version>
+    </dependency>
+    ...
+</dependencies>
+```
+### Creating a Epic API Wrapper Instance
+Using the Epic API wrapper requires some registration and setup with either the [Epic FHIR](https://fhir.epic.com/Developer/Apps) ([guide](https://fhir.epic.com/Documentation?docId=oauth2&section=BackendOAuth2Guide)) or [Epic AppMarket](https://appmarket.epic.com/Developer/Apps) ([guide](https://appmarket.epic.com/Article?docId=oauth2&section=BackendOAuth2Guide)) Developer Apps section. The respective guide for which section your account has access to details how to register your app and build your private key and public certificate for signing and submission. Once your app is submitted, you will receive a `Client ID` you can use with your private key `.pem` and FHIR endpoint to build your EpicAPI wrapper instance. 
+
+##### Simple Example
 ```java
 // Using the Epic FHIR Sandbox as an example
 String epicURL = "https://fhir.epic.com/interconnect-fhir-oauth";
@@ -21,7 +45,7 @@ String privateKeyFile = "path/to/privatekey.pem";
 EpicAPI epicAPI = new EpicAPI(epicURL, clientId, privateKeyFile);
 ```
 
-Creating an EpicAPI wrapper instance with authorization request JWT validation:
+##### Instance with authorization request JWT validation:
 ```java
 // Using the Epic FHIR Sandbox as an example
 String epicURL = "https://fhir.epic.com/interconnect-fhir-oauth";
@@ -41,6 +65,11 @@ EpicAPI epicAPI = new EpicAPI(epicURL, clientId, privateKeyFile, publicCertFile)
 ```
 
 ### Using your EpicAPI wrapper instance
+
+The actual use of the wrapper is beyond the scope of this project. For more information please refer to the [HAPI FHIR documentation](https://hapifhir.io/hapi-fhir/docs/). Provided here is a simple example that works with the Epic FHIR sandbox data.
+
+*Note that the EpicAPI keeps your HAPI FHIR context as an accessible instance member to prevent recreating contexts, which HAPI FHIR advises against as it is memory inefficient to do so.*
+
 ```java
 // Instantiate a generic restful client
 IGenericClient client = epicAPI.getFhirClient();
@@ -60,4 +89,14 @@ List<IBaseResource> patients = new ArrayList<>(
         epicAPI.getFhirContext(), bundle
     )
 );
+
+// Grab the first (patient) result and build a human-readable JSON string
+String string = epicAPI
+        .getFhirContext()
+        .newJsonParser()
+        .setPrettyPrint(true)
+        .encodeResourceToString(patients.get(0));
+
+// Print the patient information to the screen
+System.out.println(string);
 ```
