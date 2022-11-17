@@ -1,6 +1,6 @@
-# Epic FHIR [Backend Service](https://fhir.epic.com/Documentation?docId=oauth2&section=BackendOAuth2Guide) Authentication Wrapper for [HAPI FHIR](https://hapifhir.io/) client
+# Epic FHIR [Backend Service](https://fhir.epic.com/Documentation?docId=oauth2&section=BackendOAuth2Guide) Authentication Wrapper for [HAPI FHIR](https://hapifhir.io/) client (For Java 11+)
 
-A Java wrapper implementation to enable Epic FHIR 
+A Java 11+ wrapper implementation to enable Epic FHIR 
 [Backend Service](https://fhir.epic.com/Documentation?docId=oauth2&section=BackendOAuth2Guide) authentication
 with the [HAPI FHIR](https://hapifhir.io/) Java FHIR implementation with minimal setup.
 
